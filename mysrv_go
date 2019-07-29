@@ -1,0 +1,28 @@
+#!/bin/bash
+
+### BEGIN INIT INFO
+# Provides:          mysrv
+# Required-Start:    $all
+# Required-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:
+# Short-Description: your description here
+### END INIT INFO
+
+case "$1" in
+    start)  
+        /home/horoyoii/go_shutdown/bin/main &
+    ;; 
+    restart) 
+        /home/horoyoii/go_shutdown/bin/main &
+    ;; 
+    stop) 
+        # kill -9 port 8003 
+    ;; 
+    *) 
+        echo "Usage {start|stop}" 
+    exit 1 
+    ;; 
+esac 
+exit 0
+
