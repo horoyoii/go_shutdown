@@ -2,12 +2,14 @@ package main
 
 import(
     _"syscall"
-    _"fmt"
+    "fmt"
     "os/exec"
     "log"
     "io"
     "net"
     _"os"
+    "bytes"
+    "net/http"
 )
 
 // TCP Server
@@ -16,11 +18,16 @@ import(
 func main() {
     // 1) Send the endpoint INFO to server
 
+    reqBody := bytes.NewBufferString(GetLocalIP())
+    fmt.Println(GetLocalIP())
 
-
-
-
-
+    resp, err := http.Post("http://34.225.204.24:8004/api/v1/notebook/turnon", "text/plain", reqBody) 
+    fmt.Println("Send request")
+    if err != nil{
+        fmt.Println(err.Error())
+    }
+    fmt.Println("rec Response")
+    fmt.Println(resp)
 
 
 
@@ -68,7 +75,21 @@ func ConnHandler(conn net.Conn) {
     }
 }
 
-
+func GetLocalIP() string {
+    addrs, err := net.InterfaceAddrs()
+    if err != nil {
+        return ""
+    }
+    for _, address := range addrs {
+        // check the address type and if it is not a loopback the display it
+        if ipnet, ok := address.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
+            if ipnet.IP.To4() != nil {
+                return ipnet.IP.String()
+            }
+        }
+    }
+    return ""
+}
 
 // Shutdown the this computer
 func Shutdown(){
