@@ -21,33 +21,47 @@ func main() {
     reqBody := bytes.NewBufferString(GetLocalIP())
     fmt.Println(GetLocalIP())
 
-    resp, err := http.Post("http://34.225.204.24:8004/api/v1/notebook/turnon", "text/plain", reqBody) 
-    fmt.Println("Send request")
+    recv, err := http.Post("http://34.225.204.24:8004/api/v1/notebook/turnon", "text/plain", reqBody) 
+    fmt.Println("Send turnon signal to server")
     if err != nil{
         fmt.Println(err.Error())
     }
-    fmt.Println("rec Response")
-    fmt.Println(resp)
 
-
+    fmt.Println(recv)
+    fmt.Println("recieve Response")
 
 
     // 2) Wait for shutdown command 
+    fmt.Println("local program server is running")
 
-    l, err := net.Listen("tcp", ":8003")
-    if nil != err {
-        log.Fatalf("fail to bind address to 5032; err: %v", err)
-    }
-    defer l.Close()
+    http.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request){
+        fmt.Fprintf(w, "pong %s", "pong")
+    })
 
-    for {
-        conn, err := l.Accept()
-        if nil != err {
-            log.Printf("fail to accept; err: %v", err)
-            continue
-        }
-        go ConnHandler(conn)
-    }
+    http.HandleFunc("/shutdown", func(w http.ResponseWriter, r *http.Request){
+        fmt.Fprintf(w, "ok %s","shutdown")
+        Shutdown()
+    })
+   
+
+    http.ListenAndServe(":8003", nil)
+
+
+//    fmt.Println("wait for signal from server")
+//    l, err := net.Listen("tcp", ":8003")
+//    if nil != err {
+//        log.Fatalf("fail to bind address to 5032; err: %v", err)
+//    }
+//    defer l.Close()
+//
+//    for {
+//        conn, err := l.Accept()
+//        if nil != err {
+//            log.Printf("fail to accept; err: %v", err)
+//            continue
+//        }
+//        go ConnHandler(conn)
+//    }
 }
 
 func ConnHandler(conn net.Conn) {

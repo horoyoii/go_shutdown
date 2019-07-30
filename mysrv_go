@@ -11,6 +11,8 @@
 
 case "$1" in
     start)  
+        # main should run after virtual box is completely loaded.. or network error
+        sleep 20
         /home/horoyoii/go_shutdown/bin/main &
     ;; 
     restart) 
