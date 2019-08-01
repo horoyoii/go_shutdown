@@ -18,9 +18,12 @@ import(
 func main() {
     // 1) Send the endpoint INFO to server
 
-    reqBody := bytes.NewBufferString(GetLocalIP())
-    fmt.Println(GetLocalIP())
+    //reqBody := bytes.NewBufferString(GetLocalIP())
+    reqBody := bytes.NewBufferString("115.145.226.194")
 
+    fmt.Println(GetLocalIP())
+    
+    // 34.225.204.24
     recv, err := http.Post("http://34.225.204.24:8004/api/v1/notebook/turnon", "text/plain", reqBody) 
     fmt.Println("Send turnon signal to server")
     if err != nil{
@@ -35,6 +38,7 @@ func main() {
     fmt.Println("local program server is running")
 
     http.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request){
+        fmt.Println("recv request from aws server")
         fmt.Fprintf(w, "pong %s", "pong")
     })
 
