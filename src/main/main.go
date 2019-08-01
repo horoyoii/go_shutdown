@@ -18,8 +18,8 @@ import(
 func main() {
     // 1) Send the endpoint INFO to server
 
-    //reqBody := bytes.NewBufferString(GetLocalIP())
-    reqBody := bytes.NewBufferString("115.145.226.194")
+    reqBody := bytes.NewBufferString(GetLocalIP())
+    //reqBody := bytes.NewBufferString("115.145.226.194")
 
     fmt.Println(GetLocalIP())
     
